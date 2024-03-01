@@ -58,11 +58,18 @@
     <!-- Группа клиентов -->
     <div class="form-group">
       <label for="clientGroup">Группа клиентов<span>*</span></label>
-      <select multiple id="clientGroup" >
-        <option value="VIP">VIP</option>
-        <option value="problematic">Проблемные</option>
-        <option value="OMS">ОМС</option>
+      <select multiple id="clientGroup" v-model="form.clientGroup" :class="$v.form.clientGroup.$error ?  'is-valid' : '' ">
+        <option v-for="(clientGroup, index) in clientGroups"
+        :value="clientGroup.value"
+        :key="index">
+        {{ clientGroup.label }}
+      
+      </option>
       </select>
+      <p v-if="$v.form.clientGroup.$dirty && !$v.form.clientGroup.maxCount" class="invalid-feedback">
+          Не больше 1 пункта
+        </p>
+
     </div>
 
     <!-- Лечащий врач -->
@@ -129,7 +136,7 @@
     
         <div class="form-group">
       <label for="documentType">Тип документа<span>*</span></label>
-      <select id="documentType" v-model="form.documentType">
+      <select id="documentType" v-model="form.documentType" :class="$v.form.documentType.$error ?  'is-valid' : '' ">
         <option  v-for="(documentType, index) in documentTypes"
         :value="documentType.value"
         :key="index">
@@ -137,6 +144,8 @@
 
         </option>
       </select>
+      <p v-if="$v.form.documentType.$dirty && !$v.form.documentType.required" class="invalid-feedback"> Обязательное поле </p>
+
     </div>
 
     <!-- Серия -->
@@ -182,6 +191,14 @@
         <button type="submit">Создать клиента</button>
       </div>
     </form>
+    <div v-if="showPopup" class="popup">
+      <p>Новый клиент успешно создан!</p>
+      <button @click="closePopup">Закрыть</button>
+    </div>
+    <div v-if="showErrorPopup" class="popup">
+      <p>Форма содержит ошибки. Пожалуйста, исправьте их.</p>
+      <button @click="closeErrorPopup">Закрыть</button>
+    </div>
   </div>
 </template>
 
@@ -189,13 +206,15 @@
 <script>
 
 import { validationMixin } from 'vuelidate'
-import { required, minLength} from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 
 
 export default {
   mixins: [validationMixin],
   data() {
     return {
+      showPopup: false,
+      showErrorPopup: false,
       form: {
       surname: '',
       name: '',
@@ -215,7 +234,10 @@ export default {
       doctor: "Ivanov",
       gender: 'Мужской',
       noSms: false,
-      documentType: "passport",
+      documentType: 'passport',
+      clientGroup: [
+        'VIP'
+      ]
 
       },
       genderies : [
@@ -227,6 +249,20 @@ export default {
         {
           label: "Женский",
           value: "Женский"
+        }
+      ],
+      clientGroups: [
+      {
+          label: "VIP",
+          value: "VIP"
+        },
+        {
+          label: "Проблемные",
+          value: "problematic"
+        },
+        {
+          label: "ОМС",
+          value: "OMS"
         }
       ],
       doctors : [
@@ -267,9 +303,14 @@ export default {
       surname: { required },
       name: { required },
       dob: { required },
-      phone: { required, minLength: minLength(11) },
+      phone: { required, minLength: minLength(11), pattern: /^7\d{10}$/  },
       city: { required },
-     // documentType: { required },
+      clientGroup: {
+      maxCount(value) {
+        return value.length <= 1;
+      }
+    },
+      documentType: { required },
       series: { required },
       number: { required },
       issuedBy: { required },
@@ -280,11 +321,19 @@ export default {
     submitForm() {
       this.$v.form.$touch()
       if (!this.$v.form.$error){
-        console.log("Валидация прошла")
+        this.showPopup = true;
+        console.log("Валидация прошла");
       }else {
+        this.showErrorPopup = true;
         console.log('Форма содержит ошибки. Пожалуйста, исправьте их.');
       }
     },
+    closePopup() {
+    this.showPopup = false;
+  },
+  closeErrorPopup() {
+    this.showErrorPopup = false;
+  },
   },
 
 }
@@ -362,6 +411,18 @@ export default {
 
 .is-invalid {
   border-color: red;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .checkbox {
