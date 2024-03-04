@@ -1,191 +1,225 @@
 <template>
   <div class="container">
     <form class="form" @submit.prevent="submitForm">
-      <!-- Атрибуты формы -->
       <div class="form-section">
         <h2>Форма Клиета</h2>
-    <!-- Фамилия -->
-    <div class="form-group">
-      <label for="surname">Фамилия<span>*</span></label>
-      <input type="text" id="surname" v-model.trim="form.surname" :class="$v.form.surname.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.surname.$dirty && !$v.form.surname.required" class="invalid-feedback"> Обязательное поле </p>
-      
-    </div>
-
-    <!-- Имя -->
-    <div class="form-group">
-      <label for="name">Имя<span>*</span></label>
-      <input type="text" id="name" v-model.trim="form.name" :class="$v.form.name.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.name.$dirty && !$v.form.name.required" class="invalid-feedback"> Обязательное поле </p>
-    </div>
-
-    <!-- Отчество -->
-    <div class="form-group">
-      <label for="patronymic">Отчество</label>
-      <input type="text" id="patronymic" v-model.trim="form.patronymic">
-    </div>
-
-    <!-- Дата рождения -->
-    <div class="form-group">
-      <label for="dob">Дата рождения<span>*</span></label>
-      <input type="date" id="dob" v-model.trim="form.dob" :class="$v.form.dob.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.dob.$dirty && !$v.form.dob.required" class="invalid-feedback"> Обязательное поле </p>
-
-
-    </div>
-
-    <!-- Номер телефона -->
-    <div class="form-group">
-      <label for="phone">Номер телефона<span>*</span></label>
-      <input type="tel" id="phone" pattern="[0-9]{11}" v-model.trim="form.phone" :class="$v.form.phone.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.phone.$dirty && !$v.form.phone.required" class="invalid-feedback"> Обязательное поле </p>
-      <p v-if="$v.form.phone.$dirty && !$v.form.phone.minLength" class="invalid-feedback"> Здесь должно быть 11 цифр </p>
-
-    </div>
-
-    <!-- Пол -->
-    <div class="form-group">
-      <label for="gender">Пол</label>
-      <select id="gender" v-model="form.gender">
-        <option v-for="(gender, index) in genderies"
-        :value="gender.value"
-        :key="index">
-        {{ gender.label }}
-      </option>
-      </select>
-    </div>
-
-    <!-- Группа клиентов -->
-    <div class="form-group">
-      <label for="clientGroup">Группа клиентов<span>*</span></label>
-      <select multiple id="clientGroup" v-model="form.clientGroup" :class="$v.form.clientGroup.$error ?  'is-valid' : '' ">
-        <option v-for="(clientGroup, index) in clientGroups"
-        :value="clientGroup.value"
-        :key="index">
-        {{ clientGroup.label }}
-      
-      </option>
-      </select>
-      <p v-if="$v.form.clientGroup.$dirty && !$v.form.clientGroup.maxCount" class="invalid-feedback">
-          Не больше 1 пункта
-        </p>
-
-    </div>
-
-    <!-- Лечащий врач -->
-    <div class="form-group">
-      <label for="doctor">Лечащий врач</label>
-      <select id="doctor" v-model="form.doctor">
-        <option v-for="(doctor, index) in doctors"
-        :value="doctor.value"
-        :key="index">
-        {{ doctor.label }}
-      
-      </option>
-      </select>
-    </div>
-
+        <div class="form-group">
+          <label for="surname">Фамилия<span>*</span></label>
+          <input
+            type="text"
+            id="surname"
+            v-model.trim="form.surname"
+            :class="$v.form.surname.$error ? 'is-invalid' : ''"
+          />
+          <p
+            v-if="$v.form.surname.$dirty && !$v.form.surname.required"
+            class="invalid-feedback"
+          >
+            Обязательное поле
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="name">Имя<span>*</span></label>
+          <input
+            type="text"
+            id="name"
+            v-model.trim="form.name"
+            :class="$v.form.name.$error ? 'is-invalid' : ''"
+          />
+          <p
+            v-if="$v.form.name.$dirty && !$v.form.name.required"
+            class="invalid-feedback"
+          >
+            Обязательное поле
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="patronymic">Отчество</label>
+          <input type="text" id="patronymic" v-model.trim="form.patronymic" />
+        </div>
+        <div class="form-group">
+          <label for="dob">Дата рождения<span>*</span></label>
+          <input
+            type="date"
+            id="dob"
+            v-model.trim="form.dob"
+            :class="$v.form.dob.$error ? 'is-invalid' : ''"
+          />
+          <p
+            v-if="$v.form.dob.$dirty && !$v.form.dob.required"
+            class="invalid-feedback"
+          >
+            Обязательное поле
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="phone">Номер телефона<span>*</span></label>
+          <input
+            type="tel"
+            id="phone"
+            v-model.trim="form.phone"
+            :class="$v.form.phone.$error ? 'is-invalid' : ''"
+          />
+          <p
+            v-if="$v.form.phone.$dirty && !$v.form.phone.minLength"
+            class="invalid-feedback"
+          >
+            Здесь должно быть 11 цифр
+          </p>
+          <p
+            v-if="$v.form.phone.$dirty && !$v.form.phone.pattern"
+            class="invalid-feedback"
+          >
+            Неправильный формат номера
+          </p>
+          <p
+            v-if="$v.form.phone.$dirty && !$v.form.phone.required"
+            class="invalid-feedback"
+          >
+            Обязательное поле
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="gender">Пол</label>
+          <select id="gender" v-model="form.gender">
+            <option
+              v-for="(gender, index) in genderies"
+              :value="gender.value"
+              :key="index"
+            >
+              {{ gender.label }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="clientGroup">Группа клиентов<span>*</span></label>
+          <select
+            id="clientGroup"
+            :class="$v.form.clientGroups.$error ? 'is-invalid' : ''"
+            v-model="form.clientGroups"
+            multiple
+          >
+            <option
+              v-for="(clientGroup, index) in clientGroup"
+              :value="clientGroup.value"
+              :key="index"
+            >
+              {{ clientGroup.label }}
+            </option>
+          </select>
+          <p
+            v-if="$v.form.clientGroups.$dirty && !$v.form.clientGroups.maxCount"
+            class="invalid-feedback"
+          >
+            Не больше 1 пункта
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="doctor">Лечащий врач</label>
+          <select id="doctor" v-model="form.doctor">
+            <option
+              v-for="(doctor, index) in doctors"
+              :value="doctor.value"
+              :key="index"
+            >
+              {{ doctor.label }}
+            </option>
+          </select>
+        </div>
       </div>
-
-
-      <!-- Адрес -->
       <div class="form-section">
         <h2>Адрес</h2>
         <div class="form-group">
-      <label for="index">Индекс</label>
-      <input type="text" id="index" v-model.trim="form.index">
-    </div>
-
-    <!-- Страна -->
-    <div class="form-group">
-      <label for="country">Страна</label>
-      <input type="text" id="country" v-model.trim="form.country">
-    </div>
-
-    <!-- Область -->
-    <div class="form-group">
-      <label for="region">Область</label>
-      <input type="text" id="region" v-model.trim="form.region">
-    </div>
-
-    <!-- Город -->
-    <div class="form-group">
-      <label for="city">Город<span>*</span></label>
-      <input type="text" id="city" v-model.trim="form.city" :class="$v.form.city.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.city.$dirty && !$v.form.city.required" class="invalid-feedback"> Обязательное поле </p>
-
-    </div>
-
-    <!-- Улица -->
-    <div class="form-group">
-      <label for="street">Улица</label>
-      <input type="text" id="street" v-model.trim="form.street">
-    </div>
-
-    <!-- Дом -->
-    <div class="form-group">
-      <label for="house">Дом</label>
-      <input type="text" id="house" v-model.trim="form.house">
-    </div>
-
+          <label for="index">Индекс</label>
+          <input type="text" id="index" v-model.trim="form.index" />
+        </div>
+        <div class="form-group">
+          <label for="country">Страна</label>
+          <input type="text" id="country" v-model.trim="form.country" />
+        </div>
+        <div class="form-group">
+          <label for="region">Область</label>
+          <input type="text" id="region" v-model.trim="form.region" />
+        </div>
+        <div class="form-group">
+          <label for="city">Город<span>*</span></label>
+          <input
+            type="text"
+            id="city"
+            v-model.trim="form.city"
+            :class="$v.form.city.$error ? 'is-invalid' : ''"
+          />
+          <p
+            v-if="$v.form.city.$dirty && !$v.form.city.required"
+            class="invalid-feedback"
+          >
+            Обязательное поле
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="street">Улица</label>
+          <input type="text" id="street" v-model.trim="form.street" />
+        </div>
+        <div class="form-group">
+          <label for="house">Дом</label>
+          <input type="text" id="house" v-model.trim="form.house" />
+        </div>
       </div>
-
-      <!-- Паспорт -->
       <div class="form-section">
         <h2>Паспорт</h2>
-    
         <div class="form-group">
-      <label for="documentType">Тип документа<span>*</span></label>
-      <select id="documentType" v-model="form.documentType" :class="$v.form.documentType.$error ?  'is-valid' : '' ">
-        <option  v-for="(documentType, index) in documentTypes"
-        :value="documentType.value"
-        :key="index">
-        {{ documentType.label }}
-
-        </option>
-      </select>
-      <p v-if="$v.form.documentType.$dirty && !$v.form.documentType.required" class="invalid-feedback"> Обязательное поле </p>
-
-    </div>
-
-    <!-- Серия -->
-    <div class="form-group">
-      <label for="series">Серия<span>*</span></label>
-      <input type="text" id="series"  v-model.trim="form.series" :class="$v.form.series.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.series.$dirty && !$v.form.series.required" class="invalid-feedback"> Обязательное поле </p>
-
-    </div>
-
-    <!-- Номер -->
-    <div class="form-group">
-      <label for="number">Номер<span>*</span></label>
-      <input type="text" id="number"  v-model.trim="form.number" :class="$v.form.number.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.number.$dirty && !$v.form.number.required" class="invalid-feedback"> Обязательное поле </p>
-
-    </div>
-
-    <!-- Кем выдан -->
-    <div class="form-group">
-      <label for="issuedBy">Кем выдан<span>*</span></label>
-      <input type="text" id="issuedBy"  v-model.trim="form.issuedBy" :class="$v.form.issuedBy.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.issuedBy.$dirty && !$v.form.issuedBy.required" class="invalid-feedback"> Обязательное поле </p>
-
-    </div>
-
-    <!-- Дата выдачи -->
-    <div class="form-group">
-      <label for="issueDate">Дата выдачи<span>*</span></label>
-      <input type="date" id="issueDate"  v-model.trim="form.issueDate" :class="$v.form.issueDate.$error ?  'is-valid' : '' ">
-      <p v-if="$v.form.issueDate.$dirty && !$v.form.issueDate.required" class="invalid-feedback"> Обязательное поле </p>
-
-    </div>
-
+          <label for="documentType">Тип документа<span>*</span></label>
+          <select
+            id="documentType"
+            v-model="form.documentType"
+            :class="$v.form.documentType.$error ? 'is-invalid' : ''"
+          >
+            <option
+              v-for="(documentType, index) in documentTypes"
+              :value="documentType.value"
+              :key="index"
+            >
+              {{ documentType.label }}
+            </option>
+          </select>
+          <p
+            v-if="$v.form.documentType.$dirty && !$v.form.documentType.required"
+            class="invalid-feedback"
+          >
+            Обязательное поле
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="series">Серия</label>
+          <input type="text" id="series" v-model.trim="form.series" />
+        </div>
+        <div class="form-group">
+          <label for="number">Номер</label>
+          <input type="text" id="number" v-model.trim="form.number" />
+        </div>
+        <div class="form-group">
+          <label for="issuedBy">Кем выдан</label>
+          <input type="text" id="issuedBy" v-model.trim="form.issuedBy" />
+        </div>
+        <div class="form-group">
+          <label for="issueDate">Дата выдачи<span>*</span></label>
+          <input
+            type="date"
+            id="issueDate"
+            v-model.trim="form.issueDate"
+            :class="$v.form.issueDate.$error ? 'is-invalid' : ''"
+          />
+          <p
+            v-if="$v.form.issueDate.$dirty && !$v.form.issueDate.required"
+            class="invalid-feedback"
+          >
+            Обязательное поле
+          </p>
+        </div>
       </div>
-
-      <!-- Чекбокс и кнопка -->
       <div class="form-section">
         <div class="checkbox">
-          <input type="checkbox" id="noSms" v-model="form.noSms"/>
+          <input type="checkbox" id="noSms" v-model="form.noSms" />
           <label for="noSms">Не отправлять СМС</label>
         </div>
         <button type="submit">Создать клиента</button>
@@ -202,12 +236,9 @@
   </div>
 </template>
 
-
 <script>
-
-import { validationMixin } from 'vuelidate'
-import { required, minLength } from 'vuelidate/lib/validators'
-
+import { validationMixin } from "vuelidate";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   mixins: [validationMixin],
@@ -216,86 +247,80 @@ export default {
       showPopup: false,
       showErrorPopup: false,
       form: {
-      surname: '',
-      name: '',
-      patronymic: '',
-      dob: '',
-      phone: '',
-      index: '',
-      country: '',
-      region: '',
-      city: '',
-      street: '',
-      house: '',
-      series: '',
-      number: '',
-      issuedBy: '',
-      issueDate: '',
-      doctor: "Ivanov",
-      gender: 'Мужской',
-      noSms: false,
-      documentType: 'passport',
-      clientGroup: [
-        'VIP'
-      ]
-
+        surname: "",
+        name: "",
+        patronymic: "",
+        dob: "",
+        phone: "",
+        index: "",
+        country: "",
+        region: "",
+        city: "",
+        street: "",
+        house: "",
+        series: "",
+        number: "",
+        issuedBy: "",
+        issueDate: "",
+        doctor: "Ivanov",
+        gender: "Мужской",
+        noSms: false,
+        documentType: "",
+        clientGroups: [""],
       },
-      genderies : [
+      genderies: [
         {
           label: "Мужской",
-          value: "Мужской"
-
+          value: "Мужской",
         },
         {
           label: "Женский",
-          value: "Женский"
-        }
+          value: "Женский",
+        },
       ],
-      clientGroups: [
-      {
+      clientGroup: [
+        {
           label: "VIP",
-          value: "VIP"
+          value: "VIP",
         },
         {
           label: "Проблемные",
-          value: "problematic"
+          value: "problematic",
         },
         {
           label: "ОМС",
-          value: "OMS"
-        }
+          value: "OMS",
+        },
       ],
-      doctors : [
+      doctors: [
         {
           label: "Иванов",
-          value: "Ivanov"
-
+          value: "Ivanov",
         },
         {
           label: "Захаров",
-          value: "Zaharov"
+          value: "Zaharov",
         },
         {
           label: "Чернышева",
-          value: "Chernysheva"
-        }
+          value: "Chernysheva",
+        },
       ],
       documentTypes: [
-      {
+        {
           label: "Паспорт",
-          value: "passport"
+          value: "passport",
         },
         {
           label: "Свидетельство о рождении",
-          value: "birthCertificate"
+          value: "birthCertificate",
         },
         {
           label: "Вод. удостоверение",
-          value: "driverLicense"
-        }
-      ]
-      
-    }
+          value: "driverLicense",
+        },
+      ],
+    };
   },
 
   validations: {
@@ -303,47 +328,41 @@ export default {
       surname: { required },
       name: { required },
       dob: { required },
-      phone: { required, minLength: minLength(11), pattern: /^7\d{10}$/  },
+      phone: { required, minLength: minLength(11), pattern: /^[7][0-9]{10}$/ },
       city: { required },
-      clientGroup: {
-      maxCount(value) {
-        return value.length <= 1;
-      }
-    },
+      clientGroups: {
+        maxCount(value) {
+          return value.length <= 1;
+        },
+      },
       documentType: { required },
-      series: { required },
-      number: { required },
-      issuedBy: { required },
-      issueDate: { required }
+      issueDate: { required },
     },
   },
   methods: {
     submitForm() {
-      this.$v.form.$touch()
-      if (!this.$v.form.$error){
+      this.$v.form.$touch();
+      if (!this.$v.form.$error) {
         this.showPopup = true;
         console.log("Валидация прошла");
-      }else {
+      } else {
         this.showErrorPopup = true;
-        console.log('Форма содержит ошибки. Пожалуйста, исправьте их.');
+        console.log("Форма содержит ошибки. Пожалуйста, исправьте их.");
       }
     },
     closePopup() {
-    this.showPopup = false;
+      this.showPopup = false;
+    },
+    closeErrorPopup() {
+      this.showErrorPopup = false;
+    },
   },
-  closeErrorPopup() {
-    this.showErrorPopup = false;
-  },
-  },
-
-}
+};
 </script>
 
-
 <style lang="scss" scoped>
-
 .error {
-  border-color: red; /* Устанавливаем красную рамку для поля с ошибкой */
+  border-color: red;
 }
 .container {
   display: flex;
@@ -359,8 +378,8 @@ export default {
 .form-section {
   margin-bottom: 30px;
   border: 1px solid #baebdd;
-  border-radius: 10px; /* Добавляем скругление углов */
-  padding: 20px; /* Добавляем отступ внутри блока */
+  border-radius: 10px;
+  padding: 20px;
   background-color: rgb(196 227 235);
   h2 {
     margin: 0;
@@ -385,7 +404,6 @@ export default {
       border-radius: 10px;
       box-sizing: border-box;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-
     }
 
     select[multiple] {
@@ -396,17 +414,12 @@ export default {
       color: red;
       margin-left: 5px;
     }
-   
   }
 }
 
 .invalid-feedback {
   color: red;
   font-size: 0.8rem;
-}
-
-.is-valid {
-  border-color: green;
 }
 
 .is-invalid {
@@ -446,8 +459,6 @@ button {
     background-color: #0056b3;
   }
 }
-
-
 
 @media screen and (max-width: 768px) {
   .form {
