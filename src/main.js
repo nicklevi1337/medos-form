@@ -1,8 +1,11 @@
+import { connect } from "@vue/devtools-electron";
 import Vue from 'vue'
 import App from './App.vue'
 
-
-Vue.config.productionTip = false
+if (process.env.NODE_ENV === 'development') {
+  connect('http://localhost', 8098)
+}
+Vue.config.productionTip = false;
 
 new Vue({
   render: h => h(App),

@@ -324,7 +324,7 @@ export default {
   },
 
   validations: {
-    form: {
+    form: { 
       surname: { required },
       name: { required },
       dob: { required },
